@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sepeda Management</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mb-4">Sepeda Management</h1>
+
+        <!-- Form to Add Sepeda -->
+        <div class="mb-4">
+            <h3>Add Sepeda</h3>
+            <form id="addSepedaForm">
+                <div class="form-group">
+                    <label for="brand">Brand</label>
+                    <input type="text" class="form-control" id="brand" placeholder="Brand" required>
+                </div>
+                <div class="form-group">
+                    <label for="size">Size</label>
+                    <input type="number" class="form-control" id="size" placeholder="Size" required>
+                </div>
+                <div class="form-group">
+                    <label for="type">Type</label>
+                    <input type="text" class="form-control" id="type" placeholder="Type" required>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity</label>
+                    <input type="number" class="form-control" id="quantity" placeholder="Quantity" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Sepeda</button>
+            </form>
+        </div>
+
+        <!-- List Sepeda -->
+        <div class="mb-4">
+            <h3>Sepeda List</h3>
+            <button class="btn btn-secondary mb-3" onclick="fetchSepeda()">Refresh List</button>
+            <table class="table table-bordered" id="sepedaTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Brand</th>
+                        <th>Size</th>
+                        <th>Type</th>
+                        <th>Quantity</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Fetch Sepeda List
+        function fetchSepeda() {
+            fetch('http://localhost:8000/sepeda')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.status) {
+                        throw new Error(data.message || 'Failed to fetch data');
+                    }
+    
+                    const tableBody = document.querySelector('#sepedaTable tbody');
+                    tableBody.innerHTML = '';
+    
+                    // Sort sepeda by ID in ascending order
+                    data.data.sort((a, b) => a.id - b.id);
+    
+                    data.data.forEach(sepeda => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${sepeda.id}</td>
+                            <td>${sepeda.brand}</td>
+                            <td>${sepeda.size}</td>
+                            <td>${sepeda.type}</td>
+                            <td>${sepeda.quantity}</td>
+                            <td>${sepeda.created_at}</td>
+                            <td>${sepeda.updated_at}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" onclick="deleteSepeda(${sepeda.id})">Delete</button>
+                                <button class="btn btn-warning btn-sm" onclick="updateSepeda(${sepeda.id})">Update</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                })
+                .catch(error => console.error('Error fetching sepeda:', error));
+        }
+    
+        // Add Sepeda
+        document.getElementById('addSepedaForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+        
+            const brand = document.getElementById('brand').value;
+            const size = parseInt(document.getElementById('size').value, 10); // Convert to integer
+            const type = document.getElementById('type').value;
+            const quantity = parseInt(document.getElementById('quantity').value, 10); // Convert to integer
+        
+            console.log('Adding sepeda with payload:', {
+                brand,
+                size,
+                type,
+                quantity
+            });
+        
+            fetch('http://localhost:8000/sepeda/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    brand,
+                    size,
+                    type,
+                    quantity
+                })
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(`Network response was not ok: ${text}`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.status) {
+                    fetchSepeda(); // Refresh the list
+                    document.getElementById('addSepedaForm').reset();
+                } else {
+                    alert('Failed to add sepeda: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error adding sepeda:', error);
+                alert('Error adding sepeda: ' + error.message);
+            });
+        });
+    
+        // Delete Sepeda
+        function deleteSepeda(id) {
+            fetch(`http://localhost:8000/sepeda/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    fetchSepeda(); // Refresh the list
+                } else {
+                    alert('Failed to delete sepeda');
+                }
+            })
+            .catch(error => console.error('Error deleting sepeda:', error));
+        }
+    
+        // Update Sepeda
+        function updateSepeda(id) {
+            const brand = prompt('Enter new brand (leave empty to keep current):');
+            const size = prompt('Enter new size (leave empty to keep current):');
+            const type = prompt('Enter new type (leave empty to keep current):');
+            const quantity = prompt('Enter new quantity (leave empty to keep current):');
+        
+            // Prepare the update data, only include fields that are not empty
+            const updateData = {};
+            if (brand) updateData.brand = brand;
+            if (size) updateData.size = parseInt(size, 10);
+            if (type) updateData.type = type;
+            if (quantity) updateData.quantity = parseInt(quantity, 10);
+        
+            // Check if there is data to update
+            if (Object.keys(updateData).length === 0) {
+                alert('No updates were made.');
+                return;
+            }
+        
+            fetch(`http://localhost:8000/sepeda/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updateData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status) {
+                    fetchSepeda(); // Refresh the list
+                } else {
+                    alert('Failed to update sepeda: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error updating sepeda:', error));
+        }
+        
+    
+        // Initial fetch of sepeda list when the page loads
+        window.onload = function() {
+            fetchSepeda();
+        };
+    </script>
+    
+</body>
+</html>
