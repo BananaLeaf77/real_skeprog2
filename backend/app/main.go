@@ -38,7 +38,7 @@ func startHTTP() {
 
 	// CORS Middleware
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*", // Adjust as needed
+		AllowOrigins: "*",
 		AllowMethods: "GET,POST,PUT,DELETE",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))

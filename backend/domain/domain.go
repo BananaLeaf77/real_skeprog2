@@ -13,6 +13,42 @@ type Sepeda struct {
 	DeletedAt *time.Time `json:"deleted_at"`
 }
 
+func (s *Sepeda) GetBrand() string {
+	return s.Brand
+}
+
+func (s *Sepeda) SetBrand(brand string) {
+	s.Brand = brand
+}
+
+func (s *Sepeda) GetSize() int {
+	return s.Size
+}
+
+func (s *Sepeda) SetSize(size int) {
+	s.Size = size
+}
+
+type SepedaListrik struct {
+	Brand    string
+	quantity int
+}
+
+var sepedaL = SepedaListrik{
+	Brand: "Brodi",
+	quantity: 12,
+}
+
+func (s *SepedaListrik) GetQuantity() int {
+	return s.quantity
+}
+
+func (s *SepedaListrik) SetQuantity(quantity int) {
+	if quantity >= 0 {
+		s.quantity = quantity
+	}
+}
+
 type SepedaRepository interface {
 	Create(sepeda *Sepeda) error
 	GetByID(id uint) (*Sepeda, error)
