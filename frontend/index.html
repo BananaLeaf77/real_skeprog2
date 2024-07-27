@@ -39,6 +39,19 @@
             </form>
         </div>
 
+        <!-- Form to Get Sepeda by ID -->
+        <div class="mb-4">
+            <h3>Get Sepeda by ID</h3>
+            <form id="getSepedaByIdForm">
+                <div class="form-group">
+                    <label for="sepedaId">Sepeda ID</label>
+                    <input type="number" class="form-control" id="sepedaId" placeholder="Enter Sepeda ID" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Get Sepeda</button>
+            </form>
+            <div id="sepedaDetails" class="mt-4"></div>
+        </div>
+
         <!-- List Sepeda -->
         <div class="mb-4">
             <h3>Sepeda List</h3>
@@ -101,6 +114,46 @@
                 })
                 .catch(error => console.error('Error fetching sepeda:', error));
         }
+        // Get Sepeda by ID
+        document.getElementById('getSepedaByIdForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const id = parseInt(document.getElementById('sepedaId').value, 10); // Convert to integer
+
+            fetch(`http://localhost:8000/sepeda/${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Failed to fetch sepeda');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(sepeda => {
+                    if (!sepeda.status) {
+                        throw new Error(sepeda.message || 'Failed to fetch sepeda');
+                    }
+                    
+                    const sepedaData = sepeda.data;
+                    console.log('Fetched sepeda data:', sepedaData); // Add console log for debugging
+                    const sepedaDetails = document.getElementById('sepedaDetails');
+                    sepedaDetails.innerHTML = `
+                        <h4>Sepeda Details</h4>
+                        <p>ID: ${sepedaData.id}</p>
+                        <p>Brand: ${sepedaData.brand}</p>
+                        <p>Size: ${sepedaData.size}</p>
+                        <p>Type: ${sepedaData.type}</p>
+                        <p>Quantity: ${sepedaData.quantity}</p>
+                        <p>Created At: ${sepedaData.created_at}</p>
+                        <p>Updated At: ${sepedaData.updated_at}</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Error fetching sepeda by ID:', error);
+                    alert('Error fetching sepeda by ID: ' + error.message);
+                });
+        });
+
     
         // Add Sepeda
         document.getElementById('addSepedaForm').addEventListener('submit', function(event) {

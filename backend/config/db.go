@@ -21,7 +21,7 @@ func GetDatabaseURL() string {
 // fungsi booting db
 func BootDB() (*sql.DB, error) {
 	url := GetDatabaseURL()
-	fmt.Println("Connecting to database with URL:", url)
+	// fmt.Println("Connecting to database with URL:", url)
 	db, err := sql.Open("postgres", url)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open database connection: %w", err)

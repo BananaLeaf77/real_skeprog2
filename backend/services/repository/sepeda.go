@@ -37,7 +37,7 @@ func (r *sqlSepedaRepo) GetByID(id uint) (*domain.Sepeda, error) {
 	query := `
 		SELECT id, brand, size, type, quantity, created_at, updated_at, deleted_at 
 		FROM sepeda 
-		WHERE id = $1
+		WHERE id = $1 AND deleted_at IS NULL
 	`
 	err := r.db.QueryRow(query, id).Scan(&sepeda.ID, &sepeda.Brand, &sepeda.Size, &sepeda.Type, &sepeda.Quantity, &sepeda.CreatedAt, &sepeda.UpdatedAt, &sepeda.DeletedAt)
 	if err == sql.ErrNoRows {
