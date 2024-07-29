@@ -56,7 +56,10 @@ func (r *sqlSepedaRepo) Update(sepeda *domain.Sepeda) error {
 		WHERE id = $6
 	`
 	_, err := r.db.Exec(query, sepeda.Brand, sepeda.Size, sepeda.Type, sepeda.Quantity, time.Now(), sepeda.ID)
-	return err
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (r *sqlSepedaRepo) Delete(id uint) error {
@@ -94,8 +97,10 @@ func (r *sqlSepedaRepo) GetAll() (*[]domain.Sepeda, error) {
 		}
 		sepedaList = append(sepedaList, sepeda)
 	}
+	// check err pada pengulangan, fungsi Err dapat dipanggil setelah rows.close
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
+
 	return &sepedaList, nil
 }
