@@ -8,90 +8,134 @@
     <style>
         body {
             padding-top: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 900px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: #007bff;
+            color: white;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        .table thead th {
+            background-color: #007bff;
+            color: white;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="mb-4">Sepeda Management</h1>
+        <h1 class="mb-4 text-center">Sepeda Management</h1>
 
         <!-- Form to Add Sepeda -->
-        <div class="mb-4">
-            <h3>Add Sepeda</h3>
-            <form id="addSepedaForm">
-                <div class="form-group">
-                    <label for="brand">Brand</label>
-                    <input type="text" class="form-control" id="brand" placeholder="Brand" required>
-                </div>
-                <div class="form-group">
-                    <label for="size">Size</label>
-                    <input type="number" class="form-control" id="size" placeholder="Size" required>
-                </div>
-                <div class="form-group">
-                    <label for="type">Type</label>
-                    <input type="text" class="form-control" id="type" placeholder="Type" required>
-                </div>
-                <div class="form-group">
-                    <label for="quantity">Quantity</label>
-                    <input type="number" class="form-control" id="quantity" placeholder="Quantity" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Add Sepeda</button>
-            </form>
+        <div class="card">
+            <div class="card-header">
+                <h3>Add Sepeda</h3>
+            </div>
+            <div class="card-body">
+                <form id="addSepedaForm">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="brand">Brand</label>
+                            <input type="text" class="form-control" id="brand" placeholder="Brand" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="size">Size</label>
+                            <input type="number" class="form-control" id="size" placeholder="Size" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="type">Type</label>
+                            <input type="text" class="form-control" id="type" placeholder="Type" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" placeholder="Quantity" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-custom">Add Sepeda</button>
+                </form>
+            </div>
         </div>
 
         <!-- Form to Get Sepeda by ID -->
-        <div class="mb-4">
-            <h3>Get Sepeda by ID</h3>
-            <form id="getSepedaByIdForm">
-                <div class="form-group">
-                    <label for="sepedaId">Sepeda ID</label>
-                    <input type="number" class="form-control" id="sepedaId" placeholder="Enter Sepeda ID" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Get Sepeda</button>
-            </form>
-            <div id="sepedaDetails" class="mt-4"></div>
+        <div class="card">
+            <div class="card-header">
+                <h3>Get Sepeda by ID</h3>
+            </div>
+            <div class="card-body">
+                <form id="getSepedaByIdForm">
+                    <div class="form-group">
+                        <label for="sepedaId">Sepeda ID</label>
+                        <input type="number" class="form-control" id="sepedaId" placeholder="Enter Sepeda ID" required>
+                    </div>
+                    <button type="submit" class="btn btn-custom">Get Sepeda</button>
+                </form>
+                <div id="sepedaDetails" class="mt-4"></div>
+            </div>
         </div>
 
         <!-- List Sepeda -->
-        <div class="mb-4">
-            <h3>Sepeda List</h3>
-            <button class="btn btn-secondary mb-3" onclick="fetchSepeda()">Refresh List</button>
-            <table class="table table-bordered" id="sepedaTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Brand</th>
-                        <th>Size</th>
-                        <th>Type</th>
-                        <th>Quantity</th>
-                        <th>Created At</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <div class="card">
+            <div class="card-header">
+                <h3>Sepeda List</h3>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-secondary mb-3" onclick="fetchSepeda()">Refresh List</button>
+                <table class="table table-bordered" id="sepedaTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Brand</th>
+                            <th>Size</th>
+                            <th>Type</th>
+                            <th>Quantity</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
 
         <!-- List Update History -->
-        <div class="mb-4">
-            <h3>Update History</h3>
-            <button class="btn btn-secondary mb-3" onclick="fetchUpdateHistory()">Refresh History</button>
-            <table class="table table-bordered" id="updateHistoryTable">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Sepeda ID</th>
-                        <th>Old Size</th>
-                        <th>Old Type</th>
-                        <th>Old Quantity</th>
-                        <th>New Size</th>
-                        <th>New Type</th>
-                        <th>New Quantity</th>
-                        <th>Updated At</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <div class="card">
+            <div class="card-header">
+                <h3>Update History</h3>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-secondary mb-3" onclick="fetchUpdateHistory()">Refresh History</button>
+                <table class="table table-bordered" id="updateHistoryTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Sepeda ID</th>
+                            <th>Old Size</th>
+                            <th>Old Type</th>
+                            <th>Old Quantity</th>
+                            <th>New Size</th>
+                            <th>New Type</th>
+                            <th>New Quantity</th>
+                            <th>Updated At</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -100,8 +144,18 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
+
+         // Utility function to format date as DD/MM/YYYY
+         function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
          // Fetch Update History
-         function fetchUpdateHistory() {
+        function fetchUpdateHistory() {
             fetch('http://localhost:8000/update-history')
                 .then(response => response.json())
                 .then(data => {
@@ -123,7 +177,7 @@
                             <td>${history.new_size}</td>
                             <td>${history.new_type}</td>
                             <td>${history.new_quantity}</td>
-                            <td>${history.updated_at}</td>
+                            <td>${formatDate(history.updated_at)}</td>
                         `;
                         tableBody.appendChild(row);
                     });
@@ -131,8 +185,8 @@
                 .catch(error => console.error('Error fetching update history:', error));
         }
 
-        // Fetch Sepeda List
-        function fetchSepeda() {
+         // Fetch Sepeda List
+         function fetchSepeda() {
             fetch('http://localhost:8000/sepeda')
                 .then(response => response.json())
                 .then(data => {
@@ -154,8 +208,8 @@
                             <td>${sepeda.size}</td>
                             <td>${sepeda.type}</td>
                             <td>${sepeda.quantity}</td>
-                            <td>${sepeda.created_at}</td>
-                            <td>${sepeda.updated_at}</td>
+                            <td>${formatDate(sepeda.created_at)}</td>
+                            <td>${formatDate(sepeda.updated_at)}</td>
                             <td>
                                 <button class="btn btn-danger btn-sm" onclick="deleteSepeda(${sepeda.id})">Delete</button>
                                 <button class="btn btn-warning btn-sm" onclick="updateSepeda(${sepeda.id})">Update</button>
@@ -166,6 +220,8 @@
                 })
                 .catch(error => console.error('Error fetching sepeda:', error));
         }
+
+
         // Get Sepeda by ID
         document.getElementById('getSepedaByIdForm').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -173,37 +229,31 @@
             const id = parseInt(document.getElementById('sepedaId').value, 10); // Convert to integer
 
             fetch(`http://localhost:8000/sepeda/${id}`)
-                .then(response => {
-                    if (!response.ok) {
-                        return response.json().then(data => {
-                            throw new Error(data.message || 'Failed to fetch sepeda');
-                        });
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.status) {
+                        throw new Error(data.message || 'Failed to fetch sepeda');
                     }
-                    return response.json();
-                })
-                .then(sepeda => {
-                    if (!sepeda.status) {
-                        throw new Error(sepeda.message || 'Failed to fetch sepeda');
-                    }
-                    
-                    const sepedaData = sepeda.data;
-                    console.log('Fetched sepeda data:', sepedaData); // Add console log for debugging
-                    const sepedaDetails = document.getElementById('sepedaDetails');
-                    sepedaDetails.innerHTML = `
+
+                    const sepeda = data.data;
+
+                    // Format the dates
+                    const createdAt = formatDate(sepeda.created_at);
+                    const updatedAt = formatDate(sepeda.updated_at);
+
+                    const detailsDiv = document.getElementById('sepedaDetails');
+                    detailsDiv.innerHTML = `
                         <h4>Sepeda Details</h4>
-                        <p>ID: ${sepedaData.id}</p>
-                        <p>Brand: ${sepedaData.brand}</p>
-                        <p>Size: ${sepedaData.size}</p>
-                        <p>Type: ${sepedaData.type}</p>
-                        <p>Quantity: ${sepedaData.quantity}</p>
-                        <p>Created At: ${sepedaData.created_at}</p>
-                        <p>Updated At: ${sepedaData.updated_at}</p>
+                        <p><strong>ID:</strong> ${sepeda.id}</p>
+                        <p><strong>Brand:</strong> ${sepeda.brand}</p>
+                        <p><strong>Size:</strong> ${sepeda.size}</p>
+                        <p><strong>Type:</strong> ${sepeda.type}</p>
+                        <p><strong>Quantity:</strong> ${sepeda.quantity}</p>
+                        <p><strong>Created At:</strong> ${createdAt}</p>
+                        <p><strong>Updated At:</strong> ${updatedAt}</p>
                     `;
                 })
-                .catch(error => {
-                    console.error('Error fetching sepeda by ID:', error);
-                    alert('Error fetching sepeda by ID: ' + error.message);
-                });
+                .catch(error => console.error('Error fetching sepeda:', error));
         });
 
     
