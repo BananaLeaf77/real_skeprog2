@@ -23,6 +23,7 @@ func NewSepedaHandler(app fiber.Router, uc domain.SepedaUseCase) {
 	app.Put("/sepeda/:id", handler.UpdateSepeda)
 	app.Delete("/sepeda/:id", handler.DeleteSepeda)
 	app.Get("/sepeda", handler.ListSepeda)
+	app.Get("/update-history", handler.ListUpdateHistory)
 }
 
 func (h *SepedaHandler) CreateSepeda(c *fiber.Ctx) error {
@@ -186,4 +187,22 @@ func validateSepeda(sepeda domain.Sepeda) error {
 		return errors.New("Quantity must be a positive integer")
 	}
 	return nil
+}
+
+func (h *SepedaHandler) ListUpdateHistory(c *fiber.Ctx) error {
+	historyList, err := h.SepedaUseCase.GetAllUpdateHistoryUC()
+	if err != nil {
+		log.Printf("Error in GetAllUpdateHistoryUC: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to list update history",
+			"status":  false,
+			"error":   err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Success",
+		"data":    historyList,
+		"status":  true,
+	})
 }

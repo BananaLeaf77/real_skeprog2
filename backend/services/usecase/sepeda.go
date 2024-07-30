@@ -33,3 +33,7 @@ func (uc *sepedaUseCase) DeleteUC(id uint) error {
 func (uc *sepedaUseCase) GetAllUC() (*[]domain.Sepeda, error) {
 	return uc.sepedaRepo.GetAll()
 }
+
+func (uc *sepedaUseCase) GetAllUpdateHistoryUC() (*[]domain.UpdateHistory, error) {
+	return uc.sepedaRepo.GetAllUpdateHistory()
+}

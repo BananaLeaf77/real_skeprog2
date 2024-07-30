@@ -46,17 +46,30 @@ func BootDB() (*sql.DB, error) {
 // fungsi migrate
 func migrateEm(db *sql.DB) error {
 	query := `
-    CREATE TABLE IF NOT EXISTS sepeda (
-        id SERIAL PRIMARY KEY,
-        brand VARCHAR(50),
-        size INTEGER,
-        type VARCHAR(100),
-        quantity INTEGER,
-        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-        deleted_at TIMESTAMP WITH TIME ZONE
-    );
-    `
+	CREATE TABLE IF NOT EXISTS sepeda (
+	    id SERIAL PRIMARY KEY,
+	    brand VARCHAR(50) NOT NULL,
+	    size INTEGER NOT NULL,
+	    type VARCHAR(100) NOT NULL,
+	    quantity INTEGER NOT NULL,
+	    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	    deleted_at TIMESTAMP WITH TIME ZONE
+	);
+
+	CREATE TABLE IF NOT EXISTS update_history (
+	    id SERIAL PRIMARY KEY,
+	    sepeda_id INTEGER NOT NULL,
+	    old_size INTEGER,
+	    old_type VARCHAR(100),
+	    old_quantity INTEGER,
+	    new_size INTEGER,
+	    new_type VARCHAR(100),
+	    new_quantity INTEGER,
+	    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	    FOREIGN KEY (sepeda_id) REFERENCES sepeda(id)
+	);
+	`
 	_, err := db.Exec(query)
 	if err != nil {
 		fmt.Printf("Error executing migration query: %v\n", err)

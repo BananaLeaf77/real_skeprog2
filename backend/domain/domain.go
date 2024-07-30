@@ -13,6 +13,18 @@ type Sepeda struct {
 	DeletedAt *time.Time `json:"deleted_at"`
 }
 
+type UpdateHistory struct {
+	ID          uint      `json:"id"`
+	SepedaID    uint      `json:"sepeda_id"`
+	OldSize     int       `json:"old_size"`
+	OldType     string    `json:"old_type"`
+	OldQuantity int       `json:"old_quantity"`
+	NewSize     int       `json:"new_size"`
+	NewType     string    `json:"new_type"`
+	NewQuantity int       `json:"new_quantity"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
+
 func (s *Sepeda) GetBrand() string {
 	return s.Brand
 }
@@ -35,7 +47,7 @@ type SepedaListrik struct {
 }
 
 var sepedaL = SepedaListrik{
-	Brand: "Brodi",
+	Brand:    "Brodi",
 	quantity: 12,
 }
 
@@ -55,6 +67,7 @@ type SepedaRepository interface {
 	Update(sepeda *Sepeda) error
 	Delete(id uint) error
 	GetAll() (*[]Sepeda, error)
+	GetAllUpdateHistory() (*[]UpdateHistory, error)
 }
 
 type SepedaUseCase interface {
@@ -63,4 +76,5 @@ type SepedaUseCase interface {
 	UpdateUC(sepeda *Sepeda) error
 	DeleteUC(id uint) error
 	GetAllUC() (*[]Sepeda, error)
+	GetAllUpdateHistoryUC() (*[]UpdateHistory, error)
 }
