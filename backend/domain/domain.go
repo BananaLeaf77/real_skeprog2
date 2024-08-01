@@ -61,6 +61,14 @@ func (s *SepedaListrik) SetQuantity(quantity int) {
 	}
 }
 
+var itsSepeda = Sepeda{
+	ID: 1,
+	Brand: "Squeez",
+	Type: "Roadbike",
+	Size: 53,
+	Quantity: 100,
+}
+
 type SepedaRepository interface {
 	Create(sepeda *Sepeda) error
 	GetByID(id uint) (*Sepeda, error)
